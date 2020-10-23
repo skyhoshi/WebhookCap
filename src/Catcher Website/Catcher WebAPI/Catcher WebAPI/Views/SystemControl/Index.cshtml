@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Catcher_WebAPI.Models.Tables
+@inject SignInManager<tblUser> SignInManager
+@inject UserManager<tblUser> UserManager
+@{
+    ViewData["Title"] = "System Control";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="d-flex text-center flex-lg-column">
+@if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "SuperUser"))
+{
+    <h1 class="text-center">System State Control</h1>
+}
+else
+{
+    <h1 class="text-center">System's Control State</h1>
+}
+    <div class="">
+        <h3 class="h3">Current System State</h3>
+        <div class="" style="margin-top: 45px">
+            @if (ViewBag.Status == 0)
+            {
+                <div class="align-content-center">
+                    <svg width="256px" height="256px" viewBox="0 0 16 16" class="bi bi-arrow-down-circle-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                    </svg>
+                </div>
+            }
+            else if (ViewBag.Status == 1)
+            {
+                <div class="align-content-center">
+                    <svg width="256px" height="256px" viewBox="0 0 16 16" class="bi bi-arrow-up-circle" fill="green" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
+                    </svg>
+                </div>
+            }
+            else
+            {
+                <div class="align-content-center">
+                    <span>There has been a problem, System Control status has been set to @ViewBag.Status</span>
+                </div>
+            }
+        </div>
+        @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "SuperUser"))
+        {
+            <div class="align-content-center" style="margin-bottom: 45px; margin-top: 75px">
+                @using (Html.BeginForm(FormMethod.Post))
+                {
+                    @Html.Hidden("toggle", ViewBag.Status, "")
+                    ;
+                    <button class="accept-policy" type="submit">Toggle System State</button>
+                }
+            </div>
+        }
+
+    </div>
+</div>
+

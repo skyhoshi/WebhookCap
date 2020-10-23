@@ -1,0 +1,30 @@
+﻿@model Catcher_WebAPI.Models.Tables.MySubmissions
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>MySubmissions</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.GoCanSubmissionGUID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.GoCanSubmissionGUID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FormName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FormName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.LineID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

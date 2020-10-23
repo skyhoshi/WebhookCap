@@ -1,0 +1,107 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Catcher_WebAPI.Models.Tables
+@inject SignInManager<tblUser> SignInManager
+@inject UserManager<tblUser> UserManager
+@model Catcher_WebAPI.Models.Areas.APITester.TestAPIViewModel
+
+
+@{
+    ViewData["Title"] = "Test the Receiver API /api/submissions";
+    Layout = "_Layout";
+
+    var PreconfiguredSelectItems = new List<SelectListItem>();
+    
+    //FAILED
+    string WorkedSubmissionGuid00 = "01af7dfdef44a868-1602524110625";
+    string failedSubmissionGuid01 = "79dfb61020c97fdf-1602524426310";
+    string failedSubmissionGuid02 = "d29c89e1ebd603c9-1602524722856";
+    string failedSubmissionGuid03 = "54320c603c96ee84-1602525605085";
+    string failedSubmissionGuid04 = "ea2ef4e5c9ec6a91-1602525877027";
+    string failedSubmissionGuid05 = "00197A63-5E80-426F-9E88-0976BA028BA3";
+
+    string working00 = @"<?xml version=""1.0"" encoding=""UTF-8""?><submission-notification><form><id type=""integer"">3968979</id><name>Daily Employee Screening - Coronavirus (COVID-19)</name><guid>f155e88a-7831-11ea-9b00-0a67fb989868</guid><tag></tag></form><submission><guid>01af7dfdef44a868-1602524110625       </guid></submission></submission-notification>";
+    string failed01  = @"<?xml version=""1.0"" encoding=""UTF-8""?><submission-notification><form><id type=""integer"">3968979</id><name>Daily Employee Screening - Coronavirus (COVID-19)</name><guid>f155e88a-7831-11ea-9b00-0a67fb989868</guid><tag></tag></form><submission>  <guid>79dfb61020c97fdf-1602524426310       </guid></submission></submission-notification>";
+    string failed02  = @"<?xml version=""1.0"" encoding=""UTF-8""?><submission-notification><form><id type=""integer"">3968979</id><name>Daily Employee Screening - Coronavirus (COVID-19)</name><guid>f155e88a-7831-11ea-9b00-0a67fb989868</guid><tag></tag></form><submission>  <guid>d29c89e1ebd603c9-1602524722856       </guid></submission></submission-notification>";
+    string failed03  = @"<?xml version=""1.0"" encoding=""UTF-8""?><submission-notification><form><id type=""integer"">3968979</id><name>Daily Employee Screening - Coronavirus (COVID-19)</name><guid>f155e88a-7831-11ea-9b00-0a67fb989868</guid><tag></tag></form><submission>  <guid>54320c603c96ee84-1602525605085       </guid></submission></submission-notification>";
+    string failed04  = @"<?xml version=""1.0"" encoding=""UTF-8""?><submission-notification><form><id type=""integer"">3968979</id><name>Daily Employee Screening - Coronavirus (COVID-19)</name><guid>f155e88a-7831-11ea-9b00-0a67fb989868</guid><tag></tag></form><submission><guid>ea2ef4e5c9ec6a91-1602525877027       </guid></submission></submission-notification>";
+    string failed05  = @"<?xml version=""1.0"" encoding=""UTF-8""?><submission-notification><form><id type=""integer"">3968979</id><name>Daily Employee Screening - Coronavirus (COVID-19)</name><guid>f155e88a-7831-11ea-9b00-0a67fb989868</guid><tag></tag></form><submission><guid>00197A63-5E80-426F-9E88-0976BA028BA3</guid></submission></submission-notification>";
+    PreconfiguredSelectItems.Add(new SelectListItem("Select From", "0",true, true));
+    PreconfiguredSelectItems.Add(new SelectListItem("Take From Text Box", "1"));
+    PreconfiguredSelectItems.Add(new SelectListItem($"Working: {WorkedSubmissionGuid00}", working00));
+    PreconfiguredSelectItems.Add(new SelectListItem($"Failed : {failedSubmissionGuid01}", failed01));
+    PreconfiguredSelectItems.Add(new SelectListItem($"Failed : {failedSubmissionGuid02}", failed02));
+    PreconfiguredSelectItems.Add(new SelectListItem($"Failed : {failedSubmissionGuid03}", failed03));
+    PreconfiguredSelectItems.Add(new SelectListItem($"Failed : {failedSubmissionGuid04}", failed04));
+    PreconfiguredSelectItems.Add(new SelectListItem($"Failed : {failedSubmissionGuid05}", failed05));
+    
+
+}
+<h1>Test API</h1>
+@using (Html.BeginForm(actionName: "Test", controllerName: "APITester", method: FormMethod.Post))
+{
+    @Html.TextBox("submissionId", "TEST_FORM")
+    @Html.DropDownList("preTests", PreconfiguredSelectItems)
+    @Html.TextArea("testXML", "Text_XML")
+    //@Html.ActionLink("Test Api", "Test", routeValues: new {id = "submissionId"});  
+    @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "SuperUser"))
+    {
+        <button type="submit">Test</button>
+    }
+}
+
+@if (Model != null)
+{
+    RestSharp.RestRequest request = Model.restRequest;
+    RestSharp.IRestResponse response = Model.restResponse;
+
+    //RestSharp.Parameter? parameter = null;
+    //parameter = response?.Headers?.First();
+
+    <h2>Response From API @request.Resource</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.restResponse.StatusCode)</th>
+            <th>@Html.DisplayNameFor(model => model.restResponse.StatusDescription)</th>
+            @*<th></th>
+          @if (Model != null && Model.Headers != null)
+            {
+                @foreach (var item in Model?.Headers)
+                {
+                    <th>@Html.DisplayFor(modelItem => item.Name)</th>
+                    <th>@Html.DisplayFor(modelItem => item.ContentType)</th>
+                    <th>@Html.DisplayFor(modelItem => item.Type)</th>
+                    <th>@Html.DisplayFor(modelItem => item.Value)</th>
+                }
+            }
+            else
+            {
+                <th></th><th></th><th></th><th></th>
+            }*@
+            <th></th>
+            <td>@Html.DisplayNameFor(model => model.restResponse.Content)</td>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>@Model.restResponse.StatusCode.ToString()</td>
+            <td>@Model.restResponse.StatusDescription</td>
+            @*<td>></td>
+            @foreach (var item in Model.Headers)
+            {
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.ContentType)</td>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.Value)</td>
+            }*@
+            <td></td>
+            <td>@Html.DisplayFor(model => Model.restResponse.Content)</td>
+        </tr>
+        </tbody>
+    </table>
+    <h2>Request Sent From Test Page</h2>
+    <table>
+
+    </table>
+}

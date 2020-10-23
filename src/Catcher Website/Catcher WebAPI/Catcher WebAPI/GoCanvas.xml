@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<submission-notification>
+	<form>
+		<id type="integer">1</id>
+		<name>FORM_NAME</name>
+		<guid>FORM_GUID</guid>
+		<tag>Your Tag</tag>
+	</form>
+	<submission>
+		<guid>SUBMISSION_GUID</guid>
+	</submission>
+</submission-notification>

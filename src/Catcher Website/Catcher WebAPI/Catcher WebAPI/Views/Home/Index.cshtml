@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Catcher_WebAPI.Models.Tables
+@inject SignInManager<tblUser> SignInManager
+@inject UserManager<tblUser> UserManager
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User),"SuperUser"))
+    {
+        <p>Great SuperUser here you are.</p>
+    }
+    else
+    {
+        <p>Thank you for visiting, Please sign in for more options.</p>
+    }
+    
+</div>
