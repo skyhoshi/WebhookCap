@@ -11,21 +11,7 @@ using Microsoft.Extensions.Hosting;
 namespace Catcher_WebAPI.Data.CanvasData
 {
     /*
-    CommandType     Name                                               Version    Source                                                                                                                                                                             
-    -----------     ----                                               -------    ------                                                                                                                                                                             
-    Function        Add-Migration                                      3.1.8      EntityFrameworkCore                                                                                                                                                                
-    Function        Drop-Database                                      3.1.8      EntityFrameworkCore                                                                                                                                                                
-    Function        Enable-Migrations                                  3.1.8      EntityFrameworkCore                                                                                                                                                                
-    Function        Get-DbContext                                      3.1.8      EntityFrameworkCore                                                                                                                                                                
-    Function        Remove-Migration                                   3.1.8      EntityFrameworkCore                                                                                                                                                                
-    Function        Scaffold-DbContext                                 3.1.8      EntityFrameworkCore                                                                                                                                                                
-    Function        Script-DbContext                                   3.1.8      EntityFrameworkCore                                                                                                                                                                
-    Function        Script-Migration                                   3.1.8      EntityFrameworkCore                                                                                                                                                                
-    Function        Update-Database                                    3.1.8      EntityFrameworkCore
-     */
-    /*
         Adding Initial Migration
-
     //DO NOT DELETE THE INITAL MIGRATION
         Add-Migration -Name InitialGoCanvasMigration -OutputDir Data/CanvasData/Migrations -Context GoCanvasDbContext -Project CatchWatch;
         Adding Additional Migrations
@@ -34,36 +20,7 @@ namespace Catcher_WebAPI.Data.CanvasData
         Remove-Migration
         Remove-Migration -Context GoCanvasDbContext -Project CatchWatch;
         Update-Database
-        Update-Database -Context GoCanvasDbContext -Project CatchWatch;
-
-
-    ///////////////////////////////////
-    P:\Source\CanvasBadgeAutomation\Catcher Website\Catcher WebAPI\Catcher WebAPI\Data\CanvasData\Migrations\GoCanvasDbContextModelSnapshot.cs
-                modelBuilder.Entity("Catcher_WebAPI.Models.Tables.CatchWatchLocations", b =>
-                {
-                    b.Property<string>("FormName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.ToTable("tblLocations");
-                });
-    P:\Source\CanvasBadgeAutomation\Catcher Website\Catcher WebAPI\Catcher WebAPI\Data\CanvasData\Migrations\20201002161257_InitialGoCanvasMigration.cs
-    migrationBuilder.CreateTable(
-                name: "tblLocations",
-                columns: table => new
-                {
-                    Location = table.Column<string>(maxLength: 50, nullable: false),
-                    FormName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                });
-
-    
+        Update-Database -Context GoCanvasDbContext -Project CatchWatch;    
      */
 
     public class GoCanvasDbContext : DbContext

@@ -13,6 +13,12 @@ namespace Catcher_WebAPI
     {
         public static void Main(string[] args)
         {
+            //This fixes an issue with IIS that if the log folder doesn't exist at runtime then the event viewer will show an error every so often that could be interpreted as a application failure.
+            if (!System.IO.Directory.Exists("./log/"))
+            {
+                System.IO.Directory.CreateDirectory("./log/");
+            }
+
             CreateHostBuilder(args).Build().Run();
         }
 

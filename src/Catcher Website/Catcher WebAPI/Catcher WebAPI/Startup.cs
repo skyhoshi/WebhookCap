@@ -49,17 +49,17 @@ namespace Catcher_WebAPI
                 .EnableDetailedErrors(true)
                 .EnableSensitiveDataLogging(true)
                 .EnableServiceProviderCaching(false)
-                //.AddInterceptors(new IInterceptor[] { new dbCommandInterceptor(), new dbConnectionInterceptor(), new dbTransactionInterceptor() })
+                .AddInterceptors(new IInterceptor[] { new dbCommandInterceptor(), new dbConnectionInterceptor(), new dbTransactionInterceptor() })
             );
             services.AddDbContext<GoCanvasLoggingDbContext>(options => options.
                 UseSqlServer(Configuration.GetConnectionString("CatchWatchData"))
                 .EnableDetailedErrors(true)
-                //.AddInterceptors(new IInterceptor[] { new dbCommandInterceptor(), new dbConnectionInterceptor(), new dbTransactionInterceptor() })
+                .AddInterceptors(new IInterceptor[] { new dbCommandInterceptor(), new dbConnectionInterceptor(), new dbTransactionInterceptor() })
             );
             services.AddDbContext<GoCanvasDbContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("CatchWatchData"))
                 .EnableDetailedErrors(true)
-                //.AddInterceptors(new IInterceptor[] { new dbCommandInterceptor(), new dbConnectionInterceptor(), new dbTransactionInterceptor() })
+                .AddInterceptors(new IInterceptor[] { new dbCommandInterceptor(), new dbConnectionInterceptor(), new dbTransactionInterceptor() })
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll)
             );
             IdentityOptions identityOptions = new IdentityOptions
@@ -82,7 +82,6 @@ namespace Catcher_WebAPI
             };
 
             services
-                //.AddDefaultIdentity<tblUser>(options =>
                 .AddIdentity<tblUser,IdentityRole<string>>(options=>
                     {
                         options.Stores.MaxLengthForKeys = 50;//Default:Max
@@ -97,20 +96,14 @@ namespace Catcher_WebAPI
                 .AddRoleStore<RoleStore<IdentityRole<string>,ApplicationDbContext>>()
                 .AddRoleManager<RoleManager<IdentityRole<string>>>()
                 .AddRoleValidator<RoleValidator<IdentityRole<string>>>()
-                //.AddRoles<IdentityRole>()
                 .AddUserStore<UserStore<tblUser, IdentityRole<string>, ApplicationDbContext>>()
                 .AddUserManager<UserManager<tblUser>>()
                 .AddUserValidator<UserValidator<tblUser>>()
-                //.AddPasswordValidator<tblUser>()
                 .AddSignInManager<SignInManager<tblUser>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
                 ;
-
-            //services
-            //    .AddIdentity<tblUser, IdentityRole<string>>(options => options = identityOptions)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
 
 
             services
@@ -147,19 +140,6 @@ namespace Catcher_WebAPI
 
             services.TryAddSingleton<IClaimsTransformation, CatchWatchAdministrationClaimsTransformation>();
 
-            //services.Configure<MvcOptions>(options =>
-            //{
-            //    options.RespectBrowserAcceptHeader = true;
-            //    options.InputFormatters.Clear();
-            //    options.FormatterMappings.SetMediaTypeMappingForFormat("xml",MediaTypeNames.Text.Xml);
-            //    // Input formatters
-            //    //var jsonInputFormatting = new JsonInputFormatter();
-            //    //jsonInputFormatting.SerializerSettings.Converters.Add(new BatchContentConverter());
-            //    //options.InputFormatters.Add(jsonInputFormatting);
-            //////////////////////////////////////////////////////////////////////
-            //    var xmlInputFormatting = new XmlDataContractSerializerInputFormatter(options);
-            //    options.InputFormatters.Add(xmlInputFormatting);
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -175,16 +155,12 @@ namespace Catcher_WebAPI
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                //app.UseHsts();
+                app.UseHsts();
             }
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseStatusCodePages();
             app.UseRouting();
-            //app.UseSwagger(option =>
-            //{
-            //    option.RouteTemplate = "/";
-            //});
 
             app.UseRequestDatabaseLogger();
 
@@ -197,8 +173,6 @@ namespace Catcher_WebAPI
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapAreaControllerRoute(name: "areas", "apitester", "{area:exists}/{controller=apitester}/{action=Index}/{id?}");
-                //endpoints.Map("/api/",);
-                //endpoints.MapSwagger("/swagger/{documentName}/swagger.json", options => options.SerializeAsV2 = false);
                 endpoints.MapRazorPages();
             });
             CreateRoles(services).Wait();
@@ -219,9 +193,19 @@ namespace Catcher_WebAPI
             //here we are assigning the Admin role to the User that we have registered above 
             //Now, we are assinging admin role to this user("Ali@gmail.com"). When will we run this project then it will
             //be assigned to that user.
-            //IdentityUser user = await UserManager.FindByEmailAsync("Ali@gmail.com");
-            //var User = new IdentityUser();
-            //await UserManager.AddToRoleAsync(user, "SuperUser");
+            tblUser user = await UserManager.FindByEmailAsync("superuser@webhookcap.active");
+            if (user != null)
+            {
+
+                await UserManager.AddToRoleAsync(user, "SuperUser");
+            }
+            else
+            {
+                var User = new tblUser();
+                await UserManager.AddToRoleAsync(User, "SuperUser");
+            }
+            
+            
         }
     }
 }
